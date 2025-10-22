@@ -2,10 +2,6 @@ import random
 import os
 from openai import OpenAI
 import streamlit as st
-from dotenv import load_dotenv
-
-# Load environment variables from .env file if it exists
-load_dotenv()
 
 def get_api_key():
     """Get API key from various sources in order of preference"""
