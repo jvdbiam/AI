@@ -132,7 +132,7 @@ def main():
             if submit and user_answer:
                 is_correct = check_answer(client, user_answer, st.session_state.category, st.session_state.letter)
                 if is_correct:
-                    st.session_state.feedback = "✅ Goed zo!"
+                    st.session_state.feedback = "✅ Goed gedaan!"
                     st.balloons()
                     st.session_state.answered = True
                 else:
