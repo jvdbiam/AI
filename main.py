@@ -1,16 +1,7 @@
 import random
 import os
-import base64
 from openai import OpenAI
 import streamlit as st
-
-def autoplay_audio(file_path: str):
-    """Autoplay audio using HTML audio element"""
-    with open(file_path, "rb") as f:
-        audio_bytes = f.read()
-    audio_base64 = base64.b64encode(audio_bytes).decode()
-    audio_tag = f'<audio autoplay style="display: none"><source src="data:audio/mp3;base64,{audio_base64}" type="audio/mp3"></audio>'
-    st.markdown(audio_tag, unsafe_allow_html=True)
 
 def get_api_key():
     """Get API key from various sources in order of preference"""
@@ -144,11 +135,11 @@ def main():
                     st.session_state.feedback = "✅ Goed zo!"
                     st.session_state.answered = True
                     if os.path.exists("audio/correct.mp3"):
-                        autoplay_audio("audio/correct.mp3")
+                        st.audio("audio/correct.mp3")
                 else:
                     st.session_state.feedback = "❌ Helaas, dat is niet correct. Probeer het opnieuw."
                     if os.path.exists("audio/incorrect.mp3"):
-                        autoplay_audio("audio/incorrect.mp3")
+                        st.audio("audio/incorrect.mp3")
         
         # Display feedback
         if st.session_state.feedback:
