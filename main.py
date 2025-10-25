@@ -22,6 +22,21 @@ def get_api_key():
     
     return None
 
+def get_hint(client, category, letter):
+    """Get a hint from the AI about the current category and letter"""
+    try:
+        completion = client.chat.completions.create(
+            model="openai/gpt-oss-20b:free",
+            messages=[{
+                "role": "user",
+                "content": f"Geef een hint voor {category} dat begint met de letter {letter}. Maak het niet te makkelijk, geef geen direct antwoord."
+            }]
+        )
+        return completion.choices[0].message.content.strip()
+    except Exception as e:
+        st.error(f"Error getting hint: {e}")
+        return "Sorry, kon geen hint ophalen."
+
 def check_answer(client, word, category, letter):
     """Check if an answer is valid using the AI"""
     try:
@@ -115,6 +130,11 @@ def main():
         # Display feedback
         if st.session_state.feedback:
             st.write(st.session_state.feedback)
+        
+        # Hint button
+        if not st.session_state.answered and st.button("Geef een Hint"):
+            hint = get_hint(client, st.session_state.category, st.session_state.letter)
+            st.info(f"💡 Hint: {hint}")
         
         # New round button
         if st.session_state.answered and st.button("Nieuwe Ronde"):
