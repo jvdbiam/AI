@@ -1,7 +1,41 @@
+# Import necessary libraries
 import random
 import os
+import json
 from openai import OpenAI
 import streamlit as st
+
+def load_answers():
+    """Load the answers from the JSON file"""
+    try:
+        with open('answers.json', 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except Exception as e:
+        st.error(f"Error loading answers: {e}")
+        return {"categories": {}}
+
+def save_answer(category, letter, answer):
+    """Save a new answer to the JSON file"""
+    try:
+        answers = load_answers()
+        if category in answers["categories"] and letter in answers["categories"][category]:
+            if answer not in answers["categories"][category][letter]:
+                answers["categories"][category][letter].append(answer)
+                with open('answers.json', 'w', encoding='utf-8') as f:
+                    json.dump(answers, f, indent=2, ensure_ascii=False)
+    except Exception as e:
+        st.error(f"Error saving answer: {e}")
+
+def check_existing_answer(category, letter, answer):
+    """Check if an answer already exists in our database"""
+    try:
+        answers = load_answers()
+        if category in answers["categories"] and letter in answers["categories"][category]:
+            return answer.lower() in [a.lower() for a in answers["categories"][category][letter]]
+        return False
+    except Exception as e:
+        st.error(f"Error checking existing answer: {e}")
+        return False
 
 def get_api_key():
     """Get API key from various sources in order of preference"""
