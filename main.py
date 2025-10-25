@@ -96,17 +96,21 @@ def main():
         st.subheader("Vraag:")
         st.write(st.session_state.question)
         
-        # Answer input
-        user_answer = st.text_input("Jouw antwoord:", key="answer_input")
-        
-        # Check button
-        if st.button("Controleer Antwoord") and user_answer:
-            is_correct = check_answer(client, user_answer, st.session_state.category, st.session_state.letter)
-            if is_correct:
-                st.session_state.feedback = "✅ Goed zo!"
-                st.session_state.answered = True
-            else:
-                st.session_state.feedback = "❌ Helaas, dat is niet correct. Probeer het opnieuw."
+        # Create a form for answer submission
+        with st.form(key='answer_form'):
+            # Answer input
+            user_answer = st.text_input("Jouw antwoord:", key="answer_input")
+            
+            # Submit button
+            submit = st.form_submit_button("Controleer Antwoord")
+            
+            if submit and user_answer:
+                is_correct = check_answer(client, user_answer, st.session_state.category, st.session_state.letter)
+                if is_correct:
+                    st.session_state.feedback = "✅ Goed zo!"
+                    st.session_state.answered = True
+                else:
+                    st.session_state.feedback = "❌ Helaas, dat is niet correct. Probeer het opnieuw."
         
         # Display feedback
         if st.session_state.feedback:
@@ -119,4 +123,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    
