@@ -44,7 +44,7 @@ def check_answer(client, word, category, letter):
             model="openai/gpt-oss-20b:free",
             messages=[{
                 "role": "user",
-                "content": f"Klopt het woord '{word}' met de gegeven letter en categorie? {category} dat begint met de letter {letter}. Beantwoord met ja of nee"
+                "content": f"Klopt het woord '{word}' met de gegeven letter en categorie? {category} dat begint met de letter {letter}. Het moet een nederlands woord zijn. Beantwoord met ja of nee"
             }]
         )
         return completion.choices[0].message.content.lower().strip().startswith("ja")
@@ -56,14 +56,24 @@ def initialize_game():
     """Initialize or reset game state"""
     letters = ["A","B","D","F","G","H","K","L","W","V","T","S","R","P","O","N","M"]
     categories = ["Een kledingstuk", "Een jongensnaam", "Een meisjesnaam", 
-                 "Iets dat geluid maakt", "Iets zoets", "iets zuurs", 
-                 "Iets rond", "Iets warm", "Iets koud"]
+                 "Iets dat geluid maakt", "Iets zoets", "Iets zuurs", 
+                 "Iets rond", "Iets warm", "Iets koud", "Een dier",
+                 "Een land", "Een stad", "Een beroep", "Een fruit",
+                 "Een groente", "Een sport", "Een muziekinstrument",
+                 "Een vervoermiddel", "Een superheld", "Een kleur",
+                 "Een sprookjesfiguur", "Een emotie", "Een feestdag",
+                 "Een weersomstandigheid", "Een schoolvak", "Een speelgoed",
+                 "Een gebouw", "Een meubel", "Een lichaamsdeel", 
+                 "Een zeedier", "Een insect", "Een bloem", "Een boom",
+                 "Een attractie", "Een game", "Een stripfiguur", 
+                 "Een film", "Een boek", "Een restaurant", "Een hobby"]
     
     st.session_state.letter = random.choice(letters)
     st.session_state.category = random.choice(categories)
     st.session_state.question = f"{st.session_state.category} dat begint met de letter {st.session_state.letter}"
     st.session_state.answered = False
     st.session_state.feedback = ""
+    st.session_state.hint_used = False
 
 def main():
     # App title and description
@@ -135,9 +145,10 @@ def main():
         if not st.session_state.answered and st.button("Geef een Hint"):
             hint = get_hint(client, st.session_state.category, st.session_state.letter)
             st.info(f"💡 Hint: {hint}")
+            st.session_state.hint_used = True
         
         # New round button
-        if st.session_state.answered and st.button("Nieuwe Ronde"):
+        if (st.session_state.answered or st.session_state.hint_used) and st.button("Nieuwe Ronde"):
             initialize_game()
             st.rerun()
 
