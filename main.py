@@ -116,3 +116,7 @@ def main():
         if st.session_state.answered and st.button("Nieuwe Ronde"):
             initialize_game()
             st.rerun()
+
+if __name__ == "__main__":
+    main()
+    
