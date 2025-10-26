@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Woordspel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f2f6;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #ff4b4b;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #ff3333;
+        }
+        .feedback {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .feedback.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .feedback.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .hint {
+            background-color: #cce5ff;
+            color: #004085;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Woordspel</h1>
+        <p>Bedenk een woord dat past bij de categorie en begint met de gegeven letter.</p>
+        
+        <div id="api-key-section">
+            <div class="form-group">
+                <label for="api-key">OpenRouter API Key:</label>
+                <input type="password" id="api-key" placeholder="Voer je API key in">
+                <button onclick="saveApiKey()">Opslaan</button>
+            </div>
+        </div>
+
+        <div id="game-section" style="display: none;">
+            <div class="form-group">
+                <h3>Vraag:</h3>
+                <p id="current-question"></p>
+            </div>
+
+            <div class="form-group">
+                <input type="text" id="answer-input" placeholder="Jouw antwoord">
+                <button onclick="checkAnswer()">Controleer Antwoord</button>
+            </div>
+
+            <div id="feedback" class="feedback" style="display: none;"></div>
+
+            <div class="form-group">
+                <button onclick="getHint()" id="hint-button">Geef een Hint</button>
+            </div>
+            <div id="hint" class="hint" style="display: none;"></div>
+
+            <div class="form-group">
+                <button onclick="newRound()" id="new-round-button" style="display: none;">Nieuwe Ronde</button>
+            </div>
+        </div>
+    </div>
+    <script src="game.js"></script>
+</body>
+</html>
