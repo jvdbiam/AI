@@ -67,25 +67,17 @@ function saveAnswer(category, letter, answer) {
 
 // API functions
 async function checkAnswerWithAI(word, category, letter) {
-    const apiKey = localStorage.getItem('openrouterApiKey');
-    if (!apiKey) {
-        showError('API key niet gevonden. Voer eerst je API key in.');
-        return false;
-    }
-
     try {
-        const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+        const response = await fetch('/api/openai-proxy', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${apiKey}`
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                model: "openai/gpt-oss-20b:free",
-                messages: [{
-                    role: "user",
-                    content: `Klopt het woord '${word}' met de gegeven letter en categorie? ${category} dat begint met de letter ${letter}. Het moet een nederlands woord zijn. Beantwoord met ja of nee`
-                }]
+                action: 'checkAnswer',
+                params: {
+                    prompt: `Klopt het woord '${word}' met de gegeven letter en categorie? ${category} dat begint met de letter ${letter}. Het moet een nederlands woord zijn. Beantwoord met ja of nee`
+                }
             })
         });
 
@@ -99,25 +91,17 @@ async function checkAnswerWithAI(word, category, letter) {
 }
 
 async function getHintFromAI() {
-    const apiKey = localStorage.getItem('openrouterApiKey');
-    if (!apiKey) {
-        showError('API key niet gevonden. Voer eerst je API key in.');
-        return null;
-    }
-
     try {
-        const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+        const response = await fetch('/api/openai-proxy', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${apiKey}`
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                model: "openai/gpt-oss-20b:free",
-                messages: [{
-                    role: "user",
-                    content: `Geef een hint voor ${gameState.category} dat begint met de letter ${gameState.letter}. Maak het niet te makkelijk, geef geen direct antwoord.`
-                }]
+                action: 'getHint',
+                params: {
+                    prompt: `Geef een hint voor ${gameState.category} dat begint met de letter ${gameState.letter}. Maak het niet te makkelijk, geef geen direct antwoord.`
+                }
             })
         });
 
